@@ -95,9 +95,27 @@ public class SellerDaoJDBC implements SellerDao {
 	}
 
 	@Override
+	// dessa forma se der que o id nao existe nao vai fazer nada
+	// mas pode ser inserida uma excecao se quiser
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
 		
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM seller "
+							+ "WHERE Id = ?"
+					);
+			
+			st.setInt(1, id);
+			
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
